@@ -1,4 +1,8 @@
-En la base de datos del mercado se creo una vista para con los los costos promedio de por insumo de cada empresa
+# Entra a la base de datos del mercado (bd.polizona.com usuario:polizona_lectura contraseña:Polizona-1), 
+
+En los campos unidades y costoUnitario de la tabla embarques 
+
+se creo una vista para con los los costos promedio de por insumo de cada empresa
 
 CREATE VIEW costosPromedio as (
 SELECT materia, industria, financieras.boleta, idinsumo, sum(unidades*costoUnitario)/sum(unidades) as costoPromedio FROM financieras, embarques where financieras.boleta=embarques.boleta group by idinsumo,boleta  order by materia, industria, boleta)
