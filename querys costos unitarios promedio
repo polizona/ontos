@@ -1,5 +1,11 @@
-select boleta,idinsumo,1.5*(sum(costoUnitario*unidades)/sum(unidades)) as CostoUnitario from embarques where boleta in(select boleta from financieras where industria='E' and materia='inteligencia') and idinsumo='2' group by boleta,idinsumo
+En la base de datos del mercado se creo una vista para con los los costos promedio de por insumo de cada empresa
 
 CREATE VIEW costosPromedio as (
 SELECT materia, industria, financieras.boleta, idinsumo, sum(unidades*costoUnitario)/sum(unidades) as costoPromedio FROM financieras, embarques where financieras.boleta=embarques.boleta group by idinsumo,boleta  order by materia, industria, boleta)
 
+
+Para calcular el costo total del insumo por cada competidor debe multiplicarse por el factor de transformación del insumo en la mercancía, suponiendo que el factor fuera 2.5 el siguiente query devolvería los costosdel insumo 2 para los competidores de la industria E en el grupo de inteligencia
+
+select boleta,idinsumo,2.5*(costoPromedio) as CostoUnitarioA from costosPromedio where industria='E' and materia='inteligencia' and idinsumo='2' group by boleta,idinsumo
+
+lo mismo debe hacerse para el insumo2 con su correspondiente factor de transformación.
